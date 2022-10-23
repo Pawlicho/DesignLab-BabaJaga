@@ -5,11 +5,11 @@ Welcome
 
 BabaJaga Zasady Gry:
 ------------------
-1.Ilość uczestników:
+*1.Ilość uczestników:
 W grze udział bierze dwie osoby, oraz osoba prowadząca.
-2.Czas gry:
+*2.Czas gry:
 1min-3min(czas jednej rundy)
-3.Sposób gry:
+*3.Sposób gry:
 Osoba prowadząca ustala postawowe parametry gry, tj. czas trwania gry, ilość "odwróceń" się BabyJagi, oraz okres w jakim uruchamia się radar.
 Zawodnicy mają za zadanie w jak najszybszy sposób dotrzeć do BabyJagi, jednak gdy radar zostaje uruchomiony(poprzedzone przez sygnał dźwiękowy)
 gracze muszą natychmiast zastygnąć w bezruchu. Jeśli radar wykryje ruch zawodnika daje sygnał na diodzie, a sam zawodnik musi wrócić na start.
