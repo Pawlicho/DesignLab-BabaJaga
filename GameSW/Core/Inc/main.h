@@ -61,11 +61,9 @@ void Error_Handler(void);
 #define MCO_GPIO_Port GPIOA
 #define VCP_TX_Pin GPIO_PIN_2
 #define VCP_TX_GPIO_Port GPIOA
-#define DIODE_Pin GPIO_PIN_4
-#define DIODE_GPIO_Port GPIOA
-#define PIR_SIG_Pin GPIO_PIN_5
-#define PIR_SIG_GPIO_Port GPIOA
-#define PIR_SIG_EXTI_IRQn EXTI9_5_IRQn
+#define PIR_SIG_Pin GPIO_PIN_1
+#define PIR_SIG_GPIO_Port GPIOB
+#define PIR_SIG_EXTI_IRQn EXTI1_IRQn
 #define SWDIO_Pin GPIO_PIN_13
 #define SWDIO_GPIO_Port GPIOA
 #define SWCLK_Pin GPIO_PIN_14
