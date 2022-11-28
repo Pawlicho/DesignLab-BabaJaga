@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "player.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+Player player_1 = {"a", 1};
+Player player_2 = {"b", 1};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,6 +95,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if (player_1.score == 0)
+	  {
+		  HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
+	  }
+	  if (player_2.score == 0)
+	  {
+		  HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
