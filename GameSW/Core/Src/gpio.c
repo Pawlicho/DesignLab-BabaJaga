@@ -23,6 +23,9 @@
 
 /* USER CODE BEGIN 0 */
 #include "player.h"
+#include "debug_settings.h"
+extern struct Player player_one;
+extern struct Player player_two;
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -85,24 +88,27 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-extern Player player_1, player_2;
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+	/* Handling player no 1 movement detected */
 	if (GPIO_Pin == PIR_SIG_1_Pin)
 	{
 		NVIC_DisableIRQ(EXTI1_IRQn);
+		NVIC_DisableIRQ(EXTI0_IRQn);
 		/* Blink red diode */
-		player_1.score != player_1.score;
-		HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
-		NVIC_EnableIRQ(EXTI1_IRQn);
+		//HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
+		player_two.score = 1;
+		//NVIC_EnableIRQ(EXTI1_IRQn);
 	}
-	if (GPIO_Pin == PIR_SIG_2_Pin)
+	/* Handling player no 2 movement detected */
+	else if (GPIO_Pin == PIR_SIG_2_Pin)
 	{
 		NVIC_DisableIRQ(EXTI0_IRQn);
+		NVIC_DisableIRQ(EXTI1_IRQn);
 		/* Blink yellow diode */
-		HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
-		player_2.score != player_2.score;
-		NVIC_EnableIRQ(EXTI0_IRQn);
+		//HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
+		player_one.score = 1;
+		//NVIC_EnableIRQ(EXTI0_IRQn);
 	}
 }
 /* USER CODE END 2 */

@@ -24,6 +24,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "player.h"
+#include "debug_settings.h"
+#include "game_if.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,8 +46,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-Player player_1 = {"a", 1};
-Player player_2 = {"b", 1};
+extern struct Player player_one;
+extern struct Player player_two;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,7 +69,23 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  /* TODO */
+  /* Add some mechanism to disable diodes */
 
+  char player_one_name[BUFFOR_MAX_SIZE];
+  char player_two_name[BUFFOR_MAX_SIZE];
+
+  /* TODO */
+  /* Here we should anchor some mechanism to get configuration from bluetooth */
+
+  /* TODO */
+  /* For now names gonna be static - will see if we wanna send it through bluetooth */
+  char debug_name_1[BUFFOR_MAX_SIZE] = {"Pawel"};
+  char debug_name_2[BUFFOR_MAX_SIZE] = {"Mariusz"};
+  strcpy(player_one_name, debug_name_1);
+  strcpy(player_two_name, debug_name_2);
+
+  int game_is_on = game_init(player_one_name, player_two_name);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,16 +115,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (player_1.score == 0)
-	  {
-		  HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
-	  }
-	  if (player_2.score == 0)
-	  {
-		  HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
-	  }
-    /* USER CODE END WHILE */
+	  /* USER CODE END WHILE */
 
+	  //game_is_on = read_configuration();
+
+	  /* TODO */
+	  /* Change it to maybe some other diode, to signalize for e.g. red diode if players must stop */
+	  /* Some indication if game is stopped or not */
+	  if(!(game_is_on))
+	  {
+		  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, 1);
+	  }
+	  else
+	  {
+		  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, 1);
+	  }
+
+	  if (player_one.score == 1 && !(game_is_on))
+	  {
+		  HAL_GPIO_WritePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin, 1);
+		  game_is_on = 1;
+	  }
+	  else if (player_two.score == 1 && !(game_is_on))
+	  {
+		  HAL_GPIO_WritePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin, 1);
+		  game_is_on = 1;
+	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
