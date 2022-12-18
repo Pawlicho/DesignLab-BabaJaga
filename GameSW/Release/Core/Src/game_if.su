@@ -1,0 +1,3 @@
+../Core/Src/game_if.c:3:5:game_init	32	static,ignoring_inline_asm
+../Core/Src/game_if.c:23:6:end_game	0	static,ignoring_inline_asm
+../Core/Src/game_if.c:33:5:read_configuration	0	static

@@ -24,8 +24,6 @@
 /* USER CODE BEGIN 0 */
 #include "player.h"
 #include "debug_settings.h"
-extern struct Player player_one;
-extern struct Player player_two;
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -41,6 +39,8 @@ extern struct Player player_two;
         * Output
         * EVENT_OUT
         * EXTI
+     PA2   ------> USART2_TX
+     PA15 (JTDI)   ------> USART2_RX
 */
 void MX_GPIO_Init(void)
 {
@@ -53,13 +53,21 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, PIR_OUT_1_Pin|PIR_OUT_2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, PIR_OUT_1_Pin|PIR_OUT_2_Pin|BUZZER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PAPin PAPin */
-  GPIO_InitStruct.Pin = PIR_OUT_1_Pin|PIR_OUT_2_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = VCP_TX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+  HAL_GPIO_Init(VCP_TX_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PAPin PAPin PAPin */
+  GPIO_InitStruct.Pin = PIR_OUT_1_Pin|PIR_OUT_2_Pin|BUZZER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -70,6 +78,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = VCP_RX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF3_USART2;
+  HAL_GPIO_Init(VCP_RX_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LD3_Pin;
@@ -93,22 +109,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	/* Handling player no 1 movement detected */
 	if (GPIO_Pin == PIR_SIG_1_Pin)
 	{
-		NVIC_DisableIRQ(EXTI1_IRQn);
-		NVIC_DisableIRQ(EXTI0_IRQn);
 		/* Blink red diode */
-		//HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
 		player_two.score = 1;
-		//NVIC_EnableIRQ(EXTI1_IRQn);
 	}
 	/* Handling player no 2 movement detected */
 	else if (GPIO_Pin == PIR_SIG_2_Pin)
 	{
-		NVIC_DisableIRQ(EXTI0_IRQn);
-		NVIC_DisableIRQ(EXTI1_IRQn);
 		/* Blink yellow diode */
-		//HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
 		player_one.score = 1;
-		//NVIC_EnableIRQ(EXTI0_IRQn);
 	}
 }
 /* USER CODE END 2 */

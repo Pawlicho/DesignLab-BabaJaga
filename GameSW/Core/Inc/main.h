@@ -41,7 +41,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+extern struct Player player_one;
+extern struct Player player_two;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -65,6 +66,8 @@ void Error_Handler(void);
 #define PIR_OUT_1_GPIO_Port GPIOA
 #define PIR_OUT_2_Pin GPIO_PIN_4
 #define PIR_OUT_2_GPIO_Port GPIOA
+#define BUZZER_Pin GPIO_PIN_5
+#define BUZZER_GPIO_Port GPIOA
 #define PIR_SIG_1_Pin GPIO_PIN_0
 #define PIR_SIG_1_GPIO_Port GPIOB
 #define PIR_SIG_1_EXTI_IRQn EXTI0_IRQn

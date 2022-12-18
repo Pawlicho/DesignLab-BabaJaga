@@ -106,8 +106,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  const uint8_t string[] = "TEST";
 
   /* USER CODE END 2 */
 
@@ -115,32 +116,26 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* USER CODE END WHILE */
+	 HAL_UART_Transmit(&huart1, string, sizeof(string), 100);
+	 HAL_Delay(5);
+	 if (player_one.score == 1)
+	 {
+		 // Player 1 wins
+		 HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
+		 HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+		 HAL_Delay(3);
+		 end_game();
+	 }
+	 else if (player_two.score == 1)
+	 {
+		 // Player 2 wins
+		 HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
+		 HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+		 HAL_Delay(3);
+		 end_game();
+	 }
+    /* USER CODE END WHILE */
 
-	  //game_is_on = read_configuration();
-
-	  /* TODO */
-	  /* Change it to maybe some other diode, to signalize for e.g. red diode if players must stop */
-	  /* Some indication if game is stopped or not */
-	  if(!(game_is_on))
-	  {
-		  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, 1);
-	  }
-	  else
-	  {
-		  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, 1);
-	  }
-
-	  if (player_one.score == 1 && !(game_is_on))
-	  {
-		  HAL_GPIO_WritePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin, 1);
-		  game_is_on = 1;
-	  }
-	  else if (player_two.score == 1 && !(game_is_on))
-	  {
-		  HAL_GPIO_WritePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin, 1);
-		  game_is_on = 1;
-	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
