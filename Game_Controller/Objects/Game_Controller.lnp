@@ -1,0 +1,12 @@
+--cpu Cortex-M0+
+".\objects\i2c.o"
+".\objects\lcd1602.o"
+".\objects\main.o"
+".\objects\uart0.o"
+".\objects\uart_abs.o"
+".\objects\startup_mkl05z4.o"
+".\objects\system_mkl05z4.o"
+--strict --scatter ".\Objects\Game_Controller.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\Game_Controller.map" -o .\Objects\Game_Controller.axf
