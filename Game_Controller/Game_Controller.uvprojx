@@ -412,6 +412,11 @@
               <FileType>1</FileType>
               <FilePath>.\gameSettings.c</FilePath>
             </File>
+            <File>
+              <FileName>GPIO_IRQ.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GPIO_IRQ.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -446,6 +451,11 @@
               <FileName>gameSettings.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\gameSettings.h</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO_IRQ.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\GPIO_IRQ.h</FilePath>
             </File>
           </Files>
         </Group>

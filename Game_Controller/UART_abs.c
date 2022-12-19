@@ -13,9 +13,9 @@ param: pointer to array we want to send
 void uart_send(char* pbuf){
 	
 	UART0->C2 |= UART0_C2_TE_MASK;
-	for(int i=0;pbuf[i]!=0;i++)	// Zla komenda
+	for(int i=0;pbuf[i]!=0;i++)	
 	{
-		while(!(UART0->S1 & UART0_S1_TDRE_MASK));	// Czy nadajnik gotowy?
+		while(!(UART0->S1 & UART0_S1_TDRE_MASK));
 		UART0->D = pbuf[i];
 	}		
 	

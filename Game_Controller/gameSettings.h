@@ -1,7 +1,7 @@
 
 
-
-
+#include <stdlib.h>
+#include <stdint.h>
 /*
 	There we need to compose game rules, and how to implement them in our game.
 	
@@ -17,3 +17,11 @@
 		-10s
 		-15s
 */
+
+
+// Arrays declaration
+static uint8_t duration[] = {1, 2, 3};
+static uint8_t lifes[] = {1, 2, 3};
+static uint8_t time[] = {1, 2, 3};
+
+

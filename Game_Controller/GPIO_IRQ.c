@@ -1,0 +1,31 @@
+#include "GPIO_IRQ.h"
+
+
+
+
+
+void portInit(void){
+	
+	//Turn on PORTA and PORTB
+	SIM->SCGC5      |=      	SIM_SCGC5_PORTA_MASK;
+	SIM->SCGC5			|=			SIM_SCGC5_PORTB_MASK;
+	PORTB->PCR[C4]	|=			PORT_PCR_MUX(1);
+	PORTB->PCR[C3]	|=			PORT_PCR_MUX(1);
+	PORTA->PCR[C2]	|= 			PORT_PCR_MUX(1);
+	PORTA->PCR[C1]	|= 			PORT_PCR_MUX(1);
+	PORTB->PCR[C4]	|=			PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+	PORTB->PCR[C3]	|=			PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+	PORTA->PCR[C2]	|= 			PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+	PORTA->PCR[C1]	|= 			PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+		
+}
+
+
+void irqInit(void){
+	PORTA -> PCR[C4] |= PORT_PCR_IRQC(0xa);		
+	PORTA -> PCR[C3] |= PORT_PCR_IRQC(0xa);		
+	PORTA -> PCR[C2] |= PORT_PCR_IRQC(0xa);
+	PORTA -> PCR[C1] |= PORT_PCR_IRQC(0xa);
+	NVIC_ClearPendingIRQ(PORTA_IRQn);
+	NVIC_EnableIRQ(PORTA_IRQn);
+}
