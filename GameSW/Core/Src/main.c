@@ -111,8 +111,8 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   int players_movement_allowed = 1;
+  //HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
   uint8_t message = START;
-  HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
 
   /* USER CODE END 2 */
 
@@ -134,12 +134,16 @@ int main(void)
 		  //message = 0x00;
 		  break;
 	  case BABA_JAGA_PATRZY:
+		  HAL_GPIO_WritePin(PIR1_VCC_GPIO_Port, PIR1_VCC_Pin, 1);
+		  HAL_GPIO_WritePin(PIR2_VCC_GPIO_Port, PIR2_VCC_Pin, 1);
 		  NVIC_EnableIRQ(EXTI0_IRQn);
 		  NVIC_EnableIRQ(EXTI1_IRQn);
 		  players_movement_allowed = 0;
 		  //message = 0x00;
 		  break;
 	  case BABA_JAGA_NIE_PATRZY:
+		  HAL_GPIO_WritePin(PIR1_VCC_GPIO_Port, PIR1_VCC_Pin, 0);
+		  HAL_GPIO_WritePin(PIR2_VCC_GPIO_Port, PIR2_VCC_Pin, 0);
 		  NVIC_DisableIRQ(EXTI0_IRQn);
 		  NVIC_DisableIRQ(EXTI1_IRQn);
 		  players_movement_allowed = 1;
@@ -150,14 +154,14 @@ int main(void)
 		  break;
 	  }
 	  //Static toggle of game
-	  HAL_Delay(10000);
+	  HAL_Delay(3000);
 	  if (message == BABA_JAGA_NIE_PATRZY)
 		  message = BABA_JAGA_PATRZY;
 	  else if(message == BABA_JAGA_PATRZY)
 		  message = BABA_JAGA_NIE_PATRZY;
 	  if (players_movement_allowed == 0)
 	  {
-		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 1);
+		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 0);
 		  if (player_one.score == 1)
 		  {
 			  // Player 1 wins
@@ -177,7 +181,7 @@ int main(void)
 	  }
 	  else
 	  {
-		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 0);
+		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 1);
 	  }
     /* USER CODE END WHILE */
 
