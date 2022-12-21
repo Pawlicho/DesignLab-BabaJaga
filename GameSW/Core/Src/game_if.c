@@ -1,10 +1,11 @@
 #include "game_if.h"
 
-int game_init(char* player_one_name, char* player_two_name)
+void game_init(char* player_one_name, char* player_two_name)
 {
     /* Disable IRQN */
     NVIC_DisableIRQ(EXTI0_IRQn);
 	NVIC_DisableIRQ(EXTI1_IRQn);
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
 
     /* Reset score */
     player_one.score = 0;
@@ -17,7 +18,6 @@ int game_init(char* player_one_name, char* player_two_name)
     /* Enable IRQN - game starts now*/
     NVIC_EnableIRQ(EXTI0_IRQn);
 	NVIC_EnableIRQ(EXTI1_IRQn);
-	return 0;
 }
 
 void end_game()
@@ -30,10 +30,3 @@ void end_game()
 	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
 }
 
-int read_configuration()
-{
-	/* TODO */
-	/* Implement some logic for stopping game according to some clock or whatever */
-
-	return 0;
-}

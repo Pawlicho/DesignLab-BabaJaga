@@ -68,6 +68,8 @@ void Error_Handler(void);
 #define PIR_OUT_2_GPIO_Port GPIOA
 #define BUZZER_Pin GPIO_PIN_5
 #define BUZZER_GPIO_Port GPIOA
+#define BABA_JAGA_PATRZY_Pin GPIO_PIN_6
+#define BABA_JAGA_PATRZY_GPIO_Port GPIOA
 #define PIR_SIG_1_Pin GPIO_PIN_0
 #define PIR_SIG_1_GPIO_Port GPIOB
 #define PIR_SIG_1_EXTI_IRQn EXTI0_IRQn
