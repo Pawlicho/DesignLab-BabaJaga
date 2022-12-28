@@ -111,8 +111,14 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   int players_movement_allowed = 1;
-  //HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
   uint8_t message = START;
+
+  void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+  {
+	  HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
+  }
+
+  HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
 
   /* USER CODE END 2 */
 
@@ -120,14 +126,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
 	  switch (message)
 	  {
 	  case START:
 		  game_init(player_one_name, player_two_name);
 		  players_movement_allowed = 1;
-		  //message = 0x00
-		  message = BABA_JAGA_NIE_PATRZY;
+		  //message = 0x00;
+		  //message = BABA_JAGA_NIE_PATRZY;
 		  break;
 	  case STOP:
 		  end_game();
@@ -149,16 +154,15 @@ int main(void)
 		  players_movement_allowed = 1;
 		  //message = 0x00;
 		  break;
-	  default:
-		  //message = 0x00;
+	  default: ;
 		  break;
 	  }
 	  //Static toggle of game
-	  HAL_Delay(3000);
-	  if (message == BABA_JAGA_NIE_PATRZY)
-		  message = BABA_JAGA_PATRZY;
-	  else if(message == BABA_JAGA_PATRZY)
-		  message = BABA_JAGA_NIE_PATRZY;
+	  //HAL_Delay(3000);
+//	  if (message == BABA_JAGA_NIE_PATRZY)
+//		  message = BABA_JAGA_PATRZY;
+//	  else if(message == BABA_JAGA_PATRZY)
+//		  message = BABA_JAGA_NIE_PATRZY;
 	  if (players_movement_allowed == 0)
 	  {
 		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 0);

@@ -1,3 +1,3 @@
 #pragma once
 
-#define DEBUG_SESSION (0)
+#define DEBUG_SESSION (1)
