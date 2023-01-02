@@ -36,10 +36,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define START ('A')
-#define STOP ('B')
-#define BABA_JAGA_PATRZY ('C')
-#define BABA_JAGA_NIE_PATRZY ('D')
+#define START ('b')
+#define STOP ('c')
+#define BABA_JAGA_PATRZY ('d')
+#define BABA_JAGA_NIE_PATRZY ('e')
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -63,7 +63,10 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t rx;
+uint8_t debug_message[15];
+uint8_t message = START;
+int players_movement_allowed = 1;
 /* USER CODE END 0 */
 
 /**
@@ -110,16 +113,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  int players_movement_allowed = 1;
-  uint8_t message = START;
 
-  void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-  {
-	  HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
-  }
-
-  HAL_UART_Receive_IT(&huart1, &message, sizeof(message));
-
+  HAL_UART_Receive_IT(&huart1, &rx, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -131,47 +126,41 @@ int main(void)
 	  case START:
 		  game_init(player_one_name, player_two_name);
 		  players_movement_allowed = 1;
-		  //message = 0x00;
-		  //message = BABA_JAGA_NIE_PATRZY;
+		  message = 0x00;
+		  message = BABA_JAGA_NIE_PATRZY;
 		  break;
 	  case STOP:
 		  end_game();
-		  //message = 0x00;
+		  message = 0x00;
 		  break;
 	  case BABA_JAGA_PATRZY:
 		  HAL_GPIO_WritePin(PIR1_VCC_GPIO_Port, PIR1_VCC_Pin, 1);
 		  HAL_GPIO_WritePin(PIR2_VCC_GPIO_Port, PIR2_VCC_Pin, 1);
 		  NVIC_EnableIRQ(EXTI0_IRQn);
 		  NVIC_EnableIRQ(EXTI1_IRQn);
+		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 1);
 		  players_movement_allowed = 0;
-		  //message = 0x00;
+		  message = 0x00;
 		  break;
 	  case BABA_JAGA_NIE_PATRZY:
 		  HAL_GPIO_WritePin(PIR1_VCC_GPIO_Port, PIR1_VCC_Pin, 0);
 		  HAL_GPIO_WritePin(PIR2_VCC_GPIO_Port, PIR2_VCC_Pin, 0);
 		  NVIC_DisableIRQ(EXTI0_IRQn);
 		  NVIC_DisableIRQ(EXTI1_IRQn);
+		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 0);
 		  players_movement_allowed = 1;
-		  //message = 0x00;
+		  message = 0x00;
 		  break;
 	  default: ;
 		  break;
 	  }
-	  //Static toggle of game
-	  //HAL_Delay(3000);
-//	  if (message == BABA_JAGA_NIE_PATRZY)
-//		  message = BABA_JAGA_PATRZY;
-//	  else if(message == BABA_JAGA_PATRZY)
-//		  message = BABA_JAGA_NIE_PATRZY;
 	  if (players_movement_allowed == 0)
 	  {
-		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 0);
 		  if (player_one.score == 1)
 		  {
 			  // Player 1 wins
 			  HAL_GPIO_TogglePin(PIR_OUT_1_GPIO_Port, PIR_OUT_1_Pin);
 			  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
-			  HAL_Delay(2000);
 			  end_game();
 			 }
 		  else if (player_two.score == 1)
@@ -179,13 +168,8 @@ int main(void)
 			  // Player 2 wins
 			  HAL_GPIO_TogglePin(PIR_OUT_2_GPIO_Port, PIR_OUT_2_Pin);
 			  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
-			  HAL_Delay(2000);
 			  end_game();
 		  }
-	  }
-	  else
-	  {
-		  HAL_GPIO_WritePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin, 1);
 	  }
     /* USER CODE END WHILE */
 
@@ -226,7 +210,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 16;
+  RCC_OscInitStruct.PLL.PLLN = 40;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -244,7 +228,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -255,6 +239,33 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if (huart->Instance == USART1)
+	{
+		if (rx == 'e')
+		{
+			sprintf(debug_message, "Received e");
+			HAL_GPIO_TogglePin(BABA_JAGA_PATRZY_GPIO_Port, BABA_JAGA_PATRZY_Pin);
+		}
+		else if (rx == 0)
+		{
+			sprintf(debug_message, "Received 00000");
+		}
+		else
+		{
+			sprintf(debug_message, "Received sth else");
+		}
+	HAL_UART_Receive_IT(&huart1, &rx, 1);
+	HAL_UART_Transmit_IT(&huart1, debug_message, 15);
+	}
+
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+}
 
 /* USER CODE END 4 */
 
